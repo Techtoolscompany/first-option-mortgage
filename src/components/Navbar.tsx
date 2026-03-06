@@ -1,4 +1,5 @@
 import { Magnetic } from '@/components/Magnetic'
+import { House } from 'lucide-react'
 import Link from 'next/link'
 
 export function Navbar() {
@@ -7,7 +8,7 @@ export function Navbar() {
       <div className="bg-background-light/90 backdrop-blur-md border border-primary/10 rounded-[2rem] h-20 px-8 flex items-center justify-between shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
         <div className="flex items-center gap-2">
           <div className="text-primary flex items-center justify-center">
-            <span className="material-symbols-outlined text-3xl">home_work</span>
+            <House size={28} strokeWidth={1.5} />
           </div>
           <Link href="/" className="flex flex-col">
             <span className="font-display text-xl font-bold tracking-tighter text-primary uppercase leading-none">First Option</span>
