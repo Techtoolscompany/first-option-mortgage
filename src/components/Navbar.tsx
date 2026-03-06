@@ -15,10 +15,10 @@ export function Navbar() {
           </Link>
         </div>
         <nav className="hidden md:flex items-center gap-8">
-          <Link className="font-display text-sm font-medium hover:text-accent transition-colors" href="/programs">Programs</Link>
-          <Link className="font-display text-sm font-medium hover:text-accent transition-colors" href="/calculators">Calculators</Link>
           <Link className="font-display text-sm font-medium hover:text-accent transition-colors" href="/about">About</Link>
+          <Link className="font-display text-sm font-medium hover:text-accent transition-colors" href="/programs">Programs</Link>
           <Link className="font-display text-sm font-medium hover:text-accent transition-colors" href="/leadership">Leadership</Link>
+          <Link className="font-display text-sm font-medium hover:text-accent transition-colors" href="/calculators">Calculators</Link>
         </nav>
         <div className="flex items-center gap-6">
           <Magnetic strength={10}>

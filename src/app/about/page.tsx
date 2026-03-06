@@ -6,7 +6,31 @@ import { Navbar } from '@/components/Navbar'
 import { Footer } from '@/components/Footer'
 import Link from 'next/link'
 import { Magnetic } from '@/components/Magnetic'
-import { StickyScroll } from '@/components/ui/sticky-scroll-reveal'
+import { useEffect, useRef } from 'react'
+import { useInView, useMotionValue, useSpring } from 'framer-motion'
+
+function AnimatedNumber({ value, suffix = '' }: { value: number; suffix?: string }) {
+  const ref = useRef<HTMLSpanElement>(null)
+  const motionValue = useMotionValue(0)
+  const springValue = useSpring(motionValue, { damping: 40, stiffness: 100 })
+  const isInView = useInView(ref, { once: true, margin: "-100px" })
+
+  useEffect(() => {
+    if (isInView) {
+      motionValue.set(value)
+    }
+  }, [isInView, motionValue, value])
+
+  useEffect(() => {
+    return springValue.on("change", (latest) => {
+      if (ref.current) {
+        ref.current.textContent = Math.floor(latest).toString() + suffix
+      }
+    })
+  }, [springValue, suffix])
+
+  return <span ref={ref} className="text-6xl md:text-7xl font-bold font-display text-accent tracking-tighter drop-shadow-lg mb-4 block">0{suffix}</span>
+}
 
 export default function AboutPage() {
   return (
@@ -63,8 +87,8 @@ export default function AboutPage() {
             >
               <div 
                 className="w-full h-full bg-cover bg-center rounded-[2.5rem] shadow-2xl border-4 border-white"
-                style={{ backgroundImage: "url('https://images.unsplash.com/photo-1573164713988-8665fc963095?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80')" }}
-                // Using a photo of a family moving in or happy homeowners
+                style={{ backgroundImage: "url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80')" }}
+                // Real estate themed photo
               />
             </motion.div>
             <div className="absolute inset-0 bg-accent/20 translate-x-6 translate-y-6 rounded-[2.5rem] border border-accent/10 -z-0"></div>
@@ -83,50 +107,54 @@ export default function AboutPage() {
           </div>
 
           <div className="pt-10">
-            <StickyScroll 
-              content={[
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {[
                 {
                   title: '98% Customer Satisfaction',
+                  number: 98,
+                  suffix: '%',
                   description: 'We pride ourselves on providing the best possible experience for our clients, prioritizing clear communication and a stress-free procedure from start to finish. Our commitment to putting people first is reflected in our nearly perfect satisfaction score, ensuring that every family feels supported and informed.',
-                  content: (
-                    <div className="h-full w-full flex items-center justify-center text-white bg-cover bg-center rounded-lg shadow-2xl relative overflow-hidden" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80')" }}>
-                       <div className="absolute inset-0 bg-primary/20 mix-blend-overlay"></div>
-                       <span className="relative z-10 font-bold text-6xl drop-shadow-lg font-display text-accent">98%</span>
-                    </div>
-                  ),
+                  image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80'
                 },
                 {
                   title: '24 Days to Close (Avg)',
+                  number: 24,
+                  suffix: ' Days',
                   description: 'Speed matters in real estate. We work efficiently, utilizing modern technology and a highly optimized process to get you perfectly settled in your new home without unnecessary delays. Our average time to close is significantly faster than the industry standard, ensuring you secure your dream home quickly.',
-                  content: (
-                    <div className="h-full w-full flex items-center justify-center text-white bg-cover bg-center rounded-lg shadow-2xl relative overflow-hidden" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1556911220-e15b29be8c8f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80')" }}>
-                       <div className="absolute inset-0 bg-primary/20 mix-blend-overlay"></div>
-                       <span className="relative z-10 font-bold text-6xl drop-shadow-lg font-display text-accent">24 Days</span>
-                    </div>
-                  ),
+                  image: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80'
                 },
                 {
                   title: '15+ Years in Business',
+                  number: 15,
+                  suffix: '+ Years',
                   description: 'Over a decade and a half of dedicated mortgage services, navigating various market cycles and building deep trust across the communities we serve. Our longevity is a testament to our sustainable practices, reliable financial guidance, and unwavering dedication to our clients over the long term.',
-                  content: (
-                    <div className="h-full w-full flex items-center justify-center text-white bg-cover bg-center rounded-lg shadow-2xl relative overflow-hidden" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80')" }}>
-                       <div className="absolute inset-0 bg-primary/20 mix-blend-overlay"></div>
-                       <span className="relative z-10 font-bold text-6xl drop-shadow-lg font-display text-accent">15+ Years</span>
-                    </div>
-                  ),
+                  image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80'
                 },
                 {
                   title: '50k+ Families Helped',
+                  number: 50,
+                  suffix: 'k+',
                   description: 'We measure our ultimate success not just in loans closed, but by the tens of thousands of families who have achieved their dreams of homeownership through our tailored programs. From veterans to first-time buyers, we have made a tangible difference in communities nationwide.',
-                  content: (
-                    <div className="h-full w-full flex items-center justify-center text-white bg-cover bg-center rounded-lg shadow-2xl relative overflow-hidden" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1511895426328-dc8714191300?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80')" }}>
-                       <div className="absolute inset-0 bg-primary/20 mix-blend-overlay"></div>
-                       <span className="relative z-10 font-bold text-6xl drop-shadow-lg font-display text-accent">50k+</span>
-                    </div>
-                  ),
+                  image: 'https://images.unsplash.com/photo-1511895426328-dc8714191300?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80'
                 }
-              ]} 
-            />
+              ].map((item, idx) => (
+                <AnimateIn key={idx} delay={0.1 * idx}>
+                  <div className="group relative overflow-hidden rounded-[2.5rem] bg-white border border-primary/5 shadow-xl hover:shadow-2xl transition-all duration-500 h-[500px] md:h-[600px] flex flex-col justify-end">
+                    <div 
+                      className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" 
+                      style={{ backgroundImage: `url('${item.image}')` }} 
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/40 to-transparent" />
+                    
+                    <div className="relative z-10 p-10 mt-auto">
+                      <AnimatedNumber value={item.number} suffix={item.suffix} />
+                      <h3 className="text-2xl font-serif text-white font-medium mb-3 italic">{item.title}</h3>
+                      <p className="text-slate-200 text-sm font-display leading-relaxed">{item.description}</p>
+                    </div>
+                  </div>
+                </AnimateIn>
+              ))}
+            </div>
           </div>
           
           <div className="text-center mt-24">
